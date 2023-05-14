@@ -2,7 +2,6 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 
-
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -12,22 +11,15 @@ from launch.event_handlers import OnProcessStart
 
 from launch_ros.actions import Node
 
-
-
 def generate_launch_description():
-
-
 
     package_name='project2' 
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory(package_name),'launch','rsp.launch.py'
-                )]), launch_arguments={'use_sim_time': 'false', 'use_ros2_control': 'true'}.items()
+                )]), launch_arguments={'use_ros2_control': 'true'}.items()
     )
-
-  
-
 
     twist_mux_params = os.path.join(get_package_share_directory(package_name),'config','twist_mux.yaml')
     twist_mux = Node(
@@ -36,9 +28,6 @@ def generate_launch_description():
             parameters=[twist_mux_params],
             remappings=[('/cmd_vel_out','/diff_cont/cmd_vel_unstamped')]
         )
-
-    
-
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
 
@@ -79,9 +68,6 @@ def generate_launch_description():
         )
     )
 
-
-
-    # Launch them all!
     return LaunchDescription([
         rsp,
         twist_mux,
